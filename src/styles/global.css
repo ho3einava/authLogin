@@ -2,3 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: "alibaba";
+    src: url(../../public/woff2/Alibaba-Light.woff2),
+     url(../../public/woff2/Alibaba-Bold.woff2),
+     
+}
+body{
+    font-family: "alibaba";
+}

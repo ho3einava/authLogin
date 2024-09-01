@@ -1,6 +1,6 @@
 import React from "react";
 import MainInput from "../inputForm/MainInput";
-import Button from "../loginForm/Button";
+import Button from "../inputForm/Button";
 
 export default function MainForm() {
   return (

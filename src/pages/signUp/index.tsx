@@ -1,4 +1,4 @@
-import MainForm from "@/src/components/SignupForm/MainForm";
+import MainForm from "@/src/components/SignUpForm/MainForm";
 import MainLayout from "@/src/layouts/MainLayout";
 import React from "react";
 
