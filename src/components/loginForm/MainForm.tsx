@@ -33,7 +33,7 @@ const MainForm: React.FC = () => {
     formState: {errors},
   } = useForm<Inputs>({resolver: zodResolver(formSchema)});
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     console.log(data);
     try {
       const loginPayload: LoginPayload = {
@@ -43,12 +43,10 @@ const MainForm: React.FC = () => {
           password: data.password,
         },
       };
-      const token = async () => {
-        const response = await login(loginPayload);
-        console.log("login successful, Token:", response.token);
-        router.push("/");
-      };
-      return token;
+
+      const response = await login(loginPayload);
+      console.log("login successful, Token:", response.token);
+      router.push("/");
     } catch (error) {
       setError("خطا در ورود مجددا تلاش کنید");
     }
