@@ -1,23 +1,18 @@
-import {error} from "console";
 import React from "react";
 
 interface Inputs {
   name: string;
-  error?: string;
   register: any;
-  mainType: string;
+  type: string;
 }
-const MainInput = (props: Inputs) => {
+const MainInput: React.FC<Inputs> = ({name, register, type}) => {
   return (
     <div>
       <input
-        type={props.mainType}
+        type={type}
         className="w-[20rem] h-[3rem] mt-5 rounded-[0.25rem]"
-        {...props.register(props.name, {required: true})}
-        placeholder={props.name}
-        {...(props.error && (
-          <p className="text-sm text-red-900">{props.error}</p>
-        ))}
+        {...register(name)}
+        placeholder={name}
       />
     </div>
   );

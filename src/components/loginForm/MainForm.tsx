@@ -1,22 +1,57 @@
-import React from "react";
+import React, {useState} from "react";
 import MainInput from "../inputForm/MainInput";
 import Button from "../inputForm/Button";
-import {useForm, SubmitHandler} from "react-hook-form";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import * as z from "zod";
+import {login, LoginPayload} from "@/src/services/authService";
+import {useRouter} from "next/router";
 
+const formSchema = z.object({
+  userName: z
+    .string()
+    .min(2, {message: " نام کاربری اجباری است"})
+    .max(10, {message: "نام کاربری طولانی است"}),
+  password: z
+    .string()
+    .min(2, {message: "رمز عبور اجباری است"})
+    .max(10, {message: "رمز عبور طولانی است"}),
+});
+type FormData = z.infer<typeof formSchema>;
 type Inputs = {
   userName: string;
   password: string;
 };
 
-export default function MainForm() {
+const MainForm: React.FC = () => {
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
     formState: {errors},
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({resolver: zodResolver(formSchema)});
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit = (data: FormData) => {
     console.log(data);
+    try {
+      const loginPayload: LoginPayload = {
+        userType: "COMPANY",
+        passwordAuth: {
+          username: data.userName,
+          password: data.password,
+        },
+      };
+      const token = async () => {
+        const response = await login(loginPayload);
+        console.log("login successful, Token:", response.token);
+        router.push("/");
+      };
+      return token;
+    } catch (error) {
+      setError("خطا در ورود مجددا تلاش کنید");
+    }
   };
 
   return (
@@ -26,20 +61,19 @@ export default function MainForm() {
           <div className="mt-[2.8rem] w-[40rem] h-[20rem] flex flex-col items-center gap-4 justify-center">
             <h1 className="text-white text-3xl bold">Login</h1>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <MainInput
-                error={errors.userName?.message}
-                name="userName"
-                register={register}
-                mainType="text"
-              />
+              <MainInput name="userName" register={register} type="text" />
+              {errors.userName && (
+                <p className="text-sm text-red-900  font-bold mt-5">
+                  {errors.userName?.message}
+                </p>
+              )}
 
-              <MainInput
-                error={errors.password?.message}
-                name="password"
-                register={register}
-                mainType="password"
-              />
-
+              <MainInput name="password" register={register} type="password" />
+              {errors.password && (
+                <p className="text-sm text-red-900  font-bold mt-5">
+                  {errors.password?.message}
+                </p>
+              )}
               <Button name="Login" />
             </form>
           </div>
@@ -47,4 +81,5 @@ export default function MainForm() {
       </div>
     </div>
   );
-}
+};
+export default MainForm;
