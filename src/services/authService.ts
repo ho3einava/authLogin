@@ -8,7 +8,7 @@ export interface LoginPayload {
 }
 
 export interface AuthResponse {
-  token: string;
+  accessToken: string;
 }
 
 export const login = async (
@@ -28,7 +28,7 @@ export const login = async (
 
   const data: AuthResponse = await response.json();
 
-  localStorage.setItem("authToken", data.token);
+  localStorage.setItem("authToken", data.accessToken);
 
   return data;
 };

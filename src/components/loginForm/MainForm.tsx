@@ -45,7 +45,7 @@ const MainForm: React.FC = () => {
       };
 
       const response = await login(loginPayload);
-      console.log("login successful, Token:", response.token);
+      console.log("login successful, Token:", response.accessToken);
       router.push("/");
     } catch (error) {
       setError("خطا در ورود مجددا تلاش کنید");
